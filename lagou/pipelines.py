@@ -8,7 +8,7 @@
 from scrapy import log
 import pymongo
 from scrapy.conf import settings
-
+import string
 
 class LagouPipeline(object):
     def __init__(self):
@@ -25,5 +25,6 @@ class LagouPipeline(object):
         post_item = dict(item)
         if post_item.get('type')[0] not in self.db.collection_names('false'):
             self.db.create_collection(post_item.get('type')[0])
-        self.db[str(post_item.get('type')[0])].insert(post_item)
+        self.db[post_item.get('type')[0].encode('utf-8')].insert(post_item)
+        # self.db[str(dict(item).get('type'))].insert(post_item)
         return item
